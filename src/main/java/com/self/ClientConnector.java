@@ -10,12 +10,13 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
-import com.self.entity.Beer;
 import com.self.entity.QueueMessage;
 import com.self.filter.EntityFilter;
 
 public class ClientConnector {
 
+	private final String CONN_TO_ELASTICSEARCH = "http://lx-dev-cit-05:9200/queuemessage/queue/";
+	
 	public ClientConnector(){
 		
 	}
@@ -28,14 +29,15 @@ public class ClientConnector {
 				.property(ClientProperties.READ_TIMEOUT,    5000));
 	}
 	public final int send(int index, QueueMessage entity){
-		WebTarget webtarget = client.target("http://lx-dev-cit-05:9200/queuemessage/queue/"+index);
+		WebTarget webtarget = client.target(CONN_TO_ELASTICSEARCH + index);
 		Entity<QueueMessage> modEntity = Entity.entity(entity, MediaType.APPLICATION_JSON);
 		
 		Response resp = webtarget.request().put(modEntity);
 		return resp.getStatus();
 	}
+	
 	public final int delete(int index){
-		WebTarget webtarget = client.target("http://lx-dev-cit-05:9200/queuemessage/queue/"+index);
+		WebTarget webtarget = client.target(CONN_TO_ELASTICSEARCH + index);
 
 		Response resp = webtarget.request().delete();
 		return resp.getStatus();

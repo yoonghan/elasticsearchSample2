@@ -9,7 +9,7 @@ import com.self.entity.QueueMessage;
 //make random messages
 public class RandomQueueMessage {
 	
-	private final int SECONDS = 100 *60 * 60;
+	private final int TIME_GAP = 1000 *60 * 60;
 	private static final class Singleton{
 		private static final RandomQueueMessage instance = new RandomQueueMessage();
 	}
@@ -19,14 +19,22 @@ public class RandomQueueMessage {
 	}
 	
 	private Random rand = new Random();
-	private final String[] userId = new String[]{"Alex","Bob","Carris","Denver","Elephant", "Francis"};
+	private final String[] userId = new String[]{"Alex","Bob","Carris","Denver","Edward", "Francis","Gaga"};
+	private final int MAX_USERID=userId.length;
+	
 	private final String[] header = new String[]{
 		"{\"originIp\":\"127.0.0.1\"}",
 		"{\"originIp\":\"127.0.0.2\"}",
 		"{\"originIp\":\"127.0.0.3\"}",
 		"{\"originIp\":\"127.0.0.4\"}",
 		"{\"originIp\":\"127.0.0.5\"}",
+		"{\"originIp\":\"127.0.0.6\"}",
+		"{\"originIp\":\"127.0.0.7\"}",
+		"{\"originIp\":\"127.0.0.8\"}",
+		"{\"originIp\":\"127.0.0.9\"}"
 	};
+	private final int MAX_HEADER = header.length;
+	
 	private final String[] body = new String[]{
 		"\"mtId\":1000,\"message\":\"teste1\",\"priority\":1,\"expireDate\":\"01/05/2014 15:33:00,559\",\"sendTime\":\"28/04/2014 15:33:00,658\",\"retries\":5}",
 		"\"mtId\":2000,\"message\":\"teste2\",\"priority\":2,\"expireDate\":\"02/05/2014 15:33:00,559\",\"sendTime\":\"28/04/2014 15:33:00,658\",\"retries\":5}",
@@ -34,6 +42,7 @@ public class RandomQueueMessage {
 		"\"mtId\":4000,\"message\":\"teste4\",\"priority\":4,\"expireDate\":\"04/05/2014 15:33:00,559\",\"sendTime\":\"28/04/2014 15:33:00,658\",\"retries\":5}",
 		"\"mtId\":5000,\"message\":\"teste5\",\"priority\":5,\"expireDate\":\"05/05/2014 15:33:00,559\",\"sendTime\":\"28/04/2014 15:33:00,658\",\"retries\":5}",
 	};
+	private final int MAX_BODY = body.length;
 	
 	private Long getRandomId(){
 		return new Long(rand.nextInt(100));
@@ -53,7 +62,7 @@ public class RandomQueueMessage {
 	
 	private Date getRandomDate(){
 		long time = new Date().getTime();
-		return new Date(rand.nextInt(SECONDS)+time);
+		return new Date(rand.nextInt(TIME_GAP)+time);
 	}
 	
 	private Long getRandomDeliveryDate(){
@@ -61,7 +70,7 @@ public class RandomQueueMessage {
 	}
 	
 	private String getRandomUserId(){
-		return userId[rand.nextInt(5)];
+		return userId[rand.nextInt(MAX_USERID-1)];
 	}
 	
 	private Long getClusterId(){
@@ -77,11 +86,11 @@ public class RandomQueueMessage {
 	}
 	
 	private String getRandomHeader(){
-		return header[rand.nextInt(4)];
+		return header[rand.nextInt(MAX_HEADER-1)];
 	}
 	
 	private String getRandomBody(){
-		return body[rand.nextInt(4)];
+		return body[rand.nextInt(MAX_BODY-1)];
 	}
 	
 	public QueueMessage getMessage(long id){
